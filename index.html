@@ -1,0 +1,915 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>阳光散打搏击训练营 — 强身健体 · 自信成长</title>
+<meta name="description" content="专业散打搏击训练，小班教学，国家级教练指导。让孩子在汗水中收获自信与力量！">
+<style>
+/* ===== 全局重置 & 变量 ===== */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --orange: #FF6B35;
+  --orange-dark: #E55A2B;
+  --yellow: #F7C948;
+  --yellow-light: #FFEAA7;
+  --cream: #FFFDF5;
+  --teal: #4ECDC4;
+  --dark: #1A1A2E;
+  --dark2: #16213E;
+  --text: #2D2D2D;
+  --text-light: #6B6B6B;
+  --white: #FFFFFF;
+  --radius: 16px;
+  --shadow: 0 8px 30px rgba(0,0,0,0.08);
+  --shadow-lg: 0 20px 60px rgba(0,0,0,0.12);
+  --transition: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+html { scroll-behavior: smooth; font-size: 16px; }
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Microsoft YaHei", "Helvetica Neue", sans-serif;
+  color: var(--text);
+  background: var(--cream);
+  line-height: 1.7;
+  overflow-x: hidden;
+}
+
+/* ===== 导航栏 ===== */
+.nav {
+  position: fixed; top: 0; left: 0; width: 100%; z-index: 1000;
+  padding: 1rem 2rem;
+  display: flex; align-items: center; justify-content: space-between;
+  transition: background var(--transition), box-shadow var(--transition), padding var(--transition);
+  background: transparent;
+}
+.nav.scrolled {
+  background: rgba(255,255,255,0.95);
+  backdrop-filter: blur(12px);
+  box-shadow: 0 2px 20px rgba(0,0,0,0.08);
+  padding: 0.7rem 2rem;
+}
+.nav-logo {
+  font-size: 1.4rem; font-weight: 800; color: var(--white);
+  text-shadow: 0 2px 8px rgba(0,0,0,0.3);
+  transition: color var(--transition), text-shadow var(--transition);
+  display: flex; align-items: center; gap: 0.5rem;
+}
+.nav.scrolled .nav-logo { color: var(--orange); text-shadow: none; }
+.nav-logo span { font-size: 1.8rem; }
+.nav-links { display: flex; gap: 2rem; list-style: none; align-items: center; }
+.nav-links a {
+  text-decoration: none; color: rgba(255,255,255,0.9);
+  font-weight: 600; font-size: 0.95rem;
+  transition: color var(--transition);
+  position: relative;
+}
+.nav-links a::after {
+  content: ''; position: absolute; bottom: -4px; left: 0; width: 0; height: 2px;
+  background: var(--yellow); transition: width var(--transition); border-radius: 1px;
+}
+.nav-links a:hover::after, .nav-links a.active::after { width: 100%; }
+.nav.scrolled .nav-links a { color: var(--text); }
+.nav.scrolled .nav-links a:hover { color: var(--orange); }
+.nav-cta {
+  background: var(--orange); color: var(--white) !important;
+  padding: 0.5rem 1.3rem; border-radius: 50px;
+  transition: background var(--transition), transform var(--transition) !important;
+}
+.nav-cta:hover { background: var(--orange-dark); transform: translateY(-2px); }
+.nav-cta::after { display: none !important; }
+
+/* 移动端菜单 */
+.nav-toggle { display: none; flex-direction: column; gap: 5px; cursor: pointer; background: none; border: none; padding: 0.5rem; z-index: 1100; }
+.nav-toggle span { display: block; width: 26px; height: 3px; background: var(--white); border-radius: 3px; transition: all var(--transition); }
+.nav.scrolled .nav-toggle span { background: var(--text); }
+.nav-toggle.open span:nth-child(1) { transform: rotate(45deg) translate(5px, 6px); }
+.nav-toggle.open span:nth-child(2) { opacity: 0; }
+.nav-toggle.open span:nth-child(3) { transform: rotate(-45deg) translate(5px, -6px); }
+
+/* ===== Hero 区 ===== */
+.hero {
+  min-height: 100vh; display: flex; align-items: center; justify-content: center;
+  position: relative; text-align: center; padding: 2rem;
+  background: linear-gradient(135deg, #1a1a2e 0%, #16213e 30%, #e55a2b 70%, #f7c948 100%);
+  background-size: 400% 400%;
+  animation: heroGradient 12s ease infinite;
+  overflow: hidden;
+}
+@keyframes heroGradient {
+  0%, 100% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+}
+.hero::before {
+  content: ''; position: absolute; inset: 0;
+  background: radial-gradient(ellipse at 30% 50%, rgba(255,107,53,0.3) 0%, transparent 60%),
+              radial-gradient(ellipse at 70% 20%, rgba(247,201,72,0.25) 0%, transparent 50%);
+}
+.hero-particles {
+  position: absolute; inset: 0; overflow: hidden;
+}
+.hero-particles span {
+  position: absolute; display: block; width: 6px; height: 6px;
+  background: rgba(255,255,255,0.3); border-radius: 50%;
+  animation: floatUp 6s infinite;
+}
+.hero-particles span:nth-child(1) { left: 10%; animation-delay: 0s; width: 8px; height: 8px; }
+.hero-particles span:nth-child(2) { left: 25%; animation-delay: 1.5s; width: 5px; height: 5px; }
+.hero-particles span:nth-child(3) { left: 40%; animation-delay: 3s; width: 10px; height: 10px; }
+.hero-particles span:nth-child(4) { left: 55%; animation-delay: 0.8s; width: 4px; height: 4px; }
+.hero-particles span:nth-child(5) { left: 70%; animation-delay: 2.2s; width: 7px; height: 7px; }
+.hero-particles span:nth-child(6) { left: 85%; animation-delay: 4s; width: 6px; height: 6px; }
+@keyframes floatUp {
+  0% { transform: translateY(100vh) scale(0); opacity: 0; }
+  20% { opacity: 1; }
+  80% { opacity: 1; }
+  100% { transform: translateY(-10vh) scale(1.5); opacity: 0; }
+}
+.hero-content { position: relative; z-index: 1; max-width: 800px; }
+.hero-badge {
+  display: inline-block; background: rgba(255,255,255,0.15);
+  backdrop-filter: blur(8px); border: 1px solid rgba(255,255,255,0.25);
+  color: var(--yellow-light); padding: 0.4rem 1.5rem; border-radius: 50px;
+  font-size: 0.9rem; font-weight: 600; margin-bottom: 1.5rem;
+  letter-spacing: 0.05em;
+}
+.hero h1 {
+  font-size: clamp(2.5rem, 7vw, 4.5rem); font-weight: 900;
+  color: var(--white); line-height: 1.15; margin-bottom: 1rem;
+  text-shadow: 0 4px 20px rgba(0,0,0,0.25);
+}
+.hero h1 .highlight { color: var(--yellow); }
+.hero-sub {
+  font-size: clamp(1.1rem, 2.5vw, 1.4rem); color: rgba(255,255,255,0.85);
+  margin-bottom: 2.5rem; font-weight: 400;
+}
+.hero-btns { display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap; }
+.btn {
+  display: inline-flex; align-items: center; gap: 0.5rem;
+  padding: 0.85rem 2rem; border-radius: 50px; font-size: 1rem;
+  font-weight: 700; text-decoration: none; cursor: pointer;
+  transition: all var(--transition); border: none;
+}
+.btn-primary {
+  background: var(--orange); color: var(--white);
+  box-shadow: 0 6px 25px rgba(255,107,53,0.4);
+}
+.btn-primary:hover { background: var(--orange-dark); transform: translateY(-3px); box-shadow: 0 10px 35px rgba(255,107,53,0.5); }
+.btn-outline {
+  background: transparent; color: var(--white);
+  border: 2px solid rgba(255,255,255,0.6);
+}
+.btn-outline:hover { background: rgba(255,255,255,0.1); border-color: var(--white); transform: translateY(-3px); }
+
+/* ===== 通用区块样式 ===== */
+.section { padding: 5rem 2rem; }
+.section-header { text-align: center; margin-bottom: 3.5rem; }
+.section-label {
+  display: inline-block; color: var(--orange); font-weight: 700;
+  font-size: 0.9rem; text-transform: uppercase; letter-spacing: 0.1em;
+  margin-bottom: 0.5rem;
+}
+.section-header h2 {
+  font-size: clamp(1.8rem, 4vw, 2.8rem); font-weight: 900; color: var(--dark);
+  margin-bottom: 0.8rem;
+}
+.section-header p { color: var(--text-light); font-size: 1.1rem; max-width: 600px; margin: 0 auto; }
+.container { max-width: 1200px; margin: 0 auto; }
+
+/* ===== 特色卡片区 ===== */
+.features-grid {
+  display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 1.8rem; max-width: 1100px; margin: 0 auto;
+}
+.feature-card {
+  background: var(--white); border-radius: var(--radius); padding: 2.2rem 1.8rem;
+  box-shadow: var(--shadow); text-align: center;
+  transition: transform var(--transition), box-shadow var(--transition);
+  border: 1px solid rgba(0,0,0,0.04);
+  position: relative; overflow: hidden;
+}
+.feature-card::before {
+  content: ''; position: absolute; top: 0; left: 0; right: 0; height: 4px;
+  background: linear-gradient(90deg, var(--orange), var(--yellow));
+  transform: scaleX(0); transition: transform var(--transition);
+}
+.feature-card:hover { transform: translateY(-8px); box-shadow: var(--shadow-lg); }
+.feature-card:hover::before { transform: scaleX(1); }
+.feature-icon {
+  font-size: 3rem; margin-bottom: 1rem; display: block;
+}
+.feature-card h3 { font-size: 1.2rem; font-weight: 800; margin-bottom: 0.6rem; color: var(--dark); }
+.feature-card p { color: var(--text-light); font-size: 0.95rem; }
+
+/* ===== 视频展示区 ===== */
+.video-section { background: linear-gradient(180deg, var(--dark) 0%, var(--dark2) 100%); color: var(--white); }
+.video-section .section-header h2 { color: var(--white); }
+.video-section .section-header p { color: rgba(255,255,255,0.6); }
+.video-grid {
+  display: grid; grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
+  gap: 2rem; max-width: 1100px; margin: 0 auto;
+}
+.video-card {
+  background: rgba(255,255,255,0.05); border-radius: var(--radius);
+  overflow: hidden; border: 1px solid rgba(255,255,255,0.08);
+  transition: transform var(--transition);
+}
+.video-card:hover { transform: translateY(-5px); }
+.video-wrapper {
+  position: relative; width: 100%; padding-top: 56.25%;
+  background: #000;
+}
+.video-wrapper video {
+  position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover;
+}
+.video-placeholder {
+  position: absolute; inset: 0; display: flex; align-items: center; justify-content: center;
+  background: linear-gradient(135deg, rgba(26,26,46,0.9), rgba(22,33,62,0.9));
+  cursor: pointer; transition: background var(--transition);
+}
+.video-placeholder:hover { background: linear-gradient(135deg, rgba(255,107,53,0.4), rgba(247,201,72,0.2)); }
+.video-placeholder .play-icon {
+  width: 70px; height: 70px; background: rgba(255,255,255,0.2);
+  border-radius: 50%; display: flex; align-items: center; justify-content: center;
+  font-size: 2rem; backdrop-filter: blur(8px);
+  transition: transform var(--transition), background var(--transition);
+}
+.video-placeholder:hover .play-icon { transform: scale(1.1); background: var(--orange); }
+.video-card-body { padding: 1.2rem 1.5rem; }
+.video-card-body h4 { font-size: 1.1rem; margin-bottom: 0.3rem; }
+.video-card-body p { color: rgba(255,255,255,0.5); font-size: 0.9rem; }
+
+/* ===== 照片墙 ===== */
+.gallery { background: var(--cream); }
+.gallery-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  grid-auto-rows: 220px;
+  gap: 0.8rem; max-width: 1100px; margin: 0 auto;
+}
+.gallery-item {
+  position: relative; overflow: hidden; border-radius: 12px;
+  cursor: pointer; transition: transform var(--transition);
+}
+.gallery-item:hover { transform: scale(1.03); z-index: 2; }
+.gallery-item img {
+  width: 100%; height: 100%; object-fit: cover;
+  transition: transform 0.5s ease;
+}
+.gallery-item:hover img { transform: scale(1.1); }
+.gallery-item.tall { grid-row: span 2; }
+.gallery-item.wide { grid-column: span 2; }
+.gallery-overlay {
+  position: absolute; inset: 0;
+  background: linear-gradient(180deg, transparent 50%, rgba(0,0,0,0.7) 100%);
+  opacity: 0; transition: opacity var(--transition);
+  display: flex; align-items: flex-end; padding: 1.2rem;
+}
+.gallery-item:hover .gallery-overlay { opacity: 1; }
+.gallery-overlay span {
+  color: var(--white); font-weight: 600; font-size: 0.9rem;
+}
+.gallery-placeholder {
+  width: 100%; height: 100%; object-fit: cover;
+  background: linear-gradient(135deg, #e8e8e8, #d5d5d5);
+  display: flex; align-items: center; justify-content: center;
+  color: #999; font-size: 0.85rem; text-align: center;
+}
+
+/* Lightbox */
+.lightbox {
+  border: none; padding: 0; background: transparent;
+  max-width: 90vw; max-height: 90vh;
+  overflow: visible;
+}
+.lightbox::backdrop { background: rgba(0,0,0,0.9); animation: fadeIn 0.3s ease; }
+@keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+.lightbox-content { position: relative; }
+.lightbox-content img { max-width: 90vw; max-height: 85vh; border-radius: 8px; object-fit: contain; }
+.lightbox-close {
+  position: absolute; top: -1rem; right: -1rem;
+  width: 40px; height: 40px; border-radius: 50%;
+  background: var(--white); border: none; cursor: pointer;
+  font-size: 1.5rem; display: flex; align-items: center; justify-content: center;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.2); transition: background var(--transition);
+}
+.lightbox-close:hover { background: #eee; }
+.lightbox-nav {
+  position: absolute; top: 50%; transform: translateY(-50%);
+  width: 45px; height: 45px; border-radius: 50%;
+  background: rgba(255,255,255,0.2); border: none; cursor: pointer;
+  font-size: 1.2rem; color: var(--white); backdrop-filter: blur(4px);
+  transition: background var(--transition);
+}
+.lightbox-nav:hover { background: rgba(255,255,255,0.4); }
+.lightbox-prev { left: -3rem; }
+.lightbox-next { right: -3rem; }
+
+/* ===== 教练简介区 ===== */
+.coach { background: var(--white); }
+.coach-grid {
+  display: grid; grid-template-columns: 1fr 1.2fr; gap: 3rem;
+  align-items: center; max-width: 1000px; margin: 0 auto;
+}
+.coach-photo {
+  position: relative; border-radius: var(--radius); overflow: hidden;
+  aspect-ratio: 3/4; max-width: 380px; margin: 0 auto;
+}
+.coach-photo img {
+  width: 100%; height: 100%; object-fit: cover;
+}
+.coach-photo-placeholder {
+  width: 100%; height: 100%; min-height: 400px;
+  background: linear-gradient(135deg, #e0e0e0, #c8c8c8);
+  display: flex; align-items: center; justify-content: center;
+  color: #888; font-size: 1rem; text-align: center;
+  border-radius: var(--radius);
+}
+.coach-info h2 { font-size: 2rem; font-weight: 900; color: var(--dark); margin-bottom: 0.3rem; }
+.coach-title { color: var(--orange); font-weight: 700; font-size: 1.05rem; margin-bottom: 1.2rem; }
+.coach-info .bio { color: var(--text-light); margin-bottom: 1.5rem; line-height: 1.8; }
+.coach-tags { display: flex; flex-wrap: wrap; gap: 0.6rem; margin-bottom: 1.5rem; }
+.coach-tag {
+  background: var(--cream); color: var(--orange);
+  padding: 0.35rem 1rem; border-radius: 50px;
+  font-weight: 600; font-size: 0.85rem;
+  border: 1px solid rgba(255,107,53,0.2);
+}
+.coach-motto {
+  border-left: 4px solid var(--yellow);
+  padding-left: 1.2rem; font-style: italic;
+  color: var(--text-light); font-size: 1.05rem;
+}
+
+/* ===== 联系报名区 ===== */
+.contact { background: linear-gradient(180deg, var(--dark) 0%, var(--dark2) 100%); color: var(--white); }
+.contact .section-header h2 { color: var(--white); }
+.contact .section-header p { color: rgba(255,255,255,0.6); }
+.contact-grid {
+  display: grid; grid-template-columns: 1fr 1fr; gap: 3rem;
+  max-width: 1000px; margin: 0 auto; align-items: start;
+}
+.contact-info { display: flex; flex-direction: column; gap: 1.8rem; }
+.contact-item { display: flex; align-items: flex-start; gap: 1rem; }
+.contact-icon {
+  font-size: 1.6rem; width: 50px; height: 50px;
+  background: rgba(255,255,255,0.1); border-radius: 14px;
+  display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0;
+}
+.contact-item h4 { font-size: 1.05rem; margin-bottom: 0.2rem; }
+.contact-item p { color: rgba(255,255,255,0.6); font-size: 0.95rem; }
+.qr-box {
+  background: var(--white); padding: 1.2rem; border-radius: var(--radius);
+  text-align: center; display: inline-block;
+}
+.qr-box img { width: 150px; height: 150px; }
+.qr-placeholder {
+  width: 150px; height: 150px; background: #eee;
+  display: flex; align-items: center; justify-content: center;
+  color: #999; font-size: 0.8rem; text-align: center;
+}
+.qr-box p { color: var(--text); font-weight: 600; margin-top: 0.6rem; font-size: 0.9rem; }
+
+/* 表单 */
+.contact-form {
+  background: rgba(255,255,255,0.05); border-radius: var(--radius);
+  padding: 2rem; border: 1px solid rgba(255,255,255,0.08);
+}
+.form-group { margin-bottom: 1.2rem; }
+.form-group label { display: block; font-weight: 600; margin-bottom: 0.4rem; font-size: 0.95rem; }
+.form-group input,
+.form-group textarea,
+.form-group select {
+  width: 100%; padding: 0.8rem 1rem; border-radius: 10px;
+  border: 1px solid rgba(255,255,255,0.15);
+  background: rgba(255,255,255,0.08); color: var(--white);
+  font-size: 0.95rem; font-family: inherit;
+  transition: border-color var(--transition), background var(--transition);
+}
+.form-group input:focus,
+.form-group textarea:focus,
+.form-group select:focus {
+  outline: none; border-color: var(--orange);
+  background: rgba(255,255,255,0.12);
+}
+.form-group textarea { resize: vertical; min-height: 100px; }
+.form-group select option { background: var(--dark); color: var(--white); }
+.form-submit {
+  width: 100%; padding: 0.9rem; background: var(--orange);
+  color: var(--white); border: none; border-radius: 10px;
+  font-size: 1.05rem; font-weight: 700; cursor: pointer;
+  transition: background var(--transition);
+}
+.form-submit:hover { background: var(--orange-dark); }
+.form-note { text-align: center; color: rgba(255,255,255,0.4); font-size: 0.8rem; margin-top: 0.8rem; }
+
+/* ===== 页脚 ===== */
+.footer {
+  text-align: center; padding: 2.5rem 2rem;
+  background: var(--dark2); color: rgba(255,255,255,0.4);
+  font-size: 0.9rem;
+}
+.footer strong { color: rgba(255,255,255,0.7); }
+
+/* ===== 回到顶部 ===== */
+.back-to-top {
+  position: fixed; bottom: 2rem; right: 2rem; z-index: 900;
+  width: 48px; height: 48px; border-radius: 50%;
+  background: var(--orange); color: var(--white); border: none;
+  cursor: pointer; font-size: 1.2rem;
+  box-shadow: 0 4px 20px rgba(255,107,53,0.4);
+  opacity: 0; transform: translateY(20px);
+  transition: opacity var(--transition), transform var(--transition);
+  pointer-events: none;
+}
+.back-to-top.visible { opacity: 1; transform: translateY(0); pointer-events: auto; }
+.back-to-top:hover { background: var(--orange-dark); transform: translateY(-3px); }
+
+/* ===== 响应式 ===== */
+@media (max-width: 900px) {
+  .nav-links { position: fixed; top: 0; right: -100%; width: 75%; max-width: 320px; height: 100vh;
+    background: var(--white); flex-direction: column; padding: 5rem 2rem 2rem;
+    box-shadow: -10px 0 40px rgba(0,0,0,0.15); transition: right var(--transition); gap: 1.5rem; }
+  .nav-links.open { right: 0; }
+  .nav-links a { color: var(--text) !important; font-size: 1.1rem; }
+  .nav-toggle { display: flex; }
+  .coach-grid { grid-template-columns: 1fr; text-align: center; }
+  .coach-photo { max-width: 280px; }
+  .coach-tags { justify-content: center; }
+  .coach-motto { text-align: left; }
+  .contact-grid { grid-template-columns: 1fr; }
+  .gallery-grid { grid-template-columns: repeat(2, 1fr); grid-auto-rows: 180px; }
+  .gallery-item.wide { grid-column: span 2; }
+  .video-grid { grid-template-columns: 1fr; }
+}
+
+@media (max-width: 500px) {
+  .hero h1 { font-size: 2rem; }
+  .section { padding: 3rem 1rem; }
+  .gallery-grid { grid-template-columns: 1fr 1fr; grid-auto-rows: 150px; }
+  .gallery-item.wide { grid-column: span 2; }
+  .lightbox-prev { left: -1.5rem; }
+  .lightbox-next { right: -1.5rem; }
+  .btn { padding: 0.7rem 1.5rem; font-size: 0.9rem; }
+}
+</style>
+</head>
+<body>
+
+<!-- ===== 导航栏 ===== -->
+<nav class="nav" id="navbar">
+  <a href="#hero" class="nav-logo"><span>🥊</span>阳光散打</a>
+  <ul class="nav-links" id="navLinks">
+    <li><a href="#hero" class="active">首页</a></li>
+    <li><a href="#features">训练特色</a></li>
+    <li><a href="#gallery">精彩瞬间</a></li>
+    <li><a href="#coach">教练介绍</a></li>
+    <li><a href="#contact" class="nav-cta">免费体验</a></li>
+  </ul>
+  <button class="nav-toggle" id="navToggle" aria-label="菜单">
+    <span></span><span></span><span></span>
+  </button>
+</nav>
+
+<!-- ===== Hero 区 ===== -->
+<section class="hero" id="hero">
+  <div class="hero-particles">
+    <span></span><span></span><span></span><span></span><span></span><span></span>
+  </div>
+  <div class="hero-content">
+    <div class="hero-badge">🔥 2026 夏季班火热招生中</div>
+    <h1>挥洒汗水，<span class="highlight">成就强者</span></h1>
+    <p class="hero-sub">专业散打搏击训练 · 强身健体 · 自信成长 · 小班精品教学</p>
+    <div class="hero-btns">
+      <a href="#contact" class="btn btn-primary">⚡ 立即报名体验课</a>
+      <a href="#gallery" class="btn btn-outline">📸 查看训练风采</a>
+    </div>
+  </div>
+</section>
+
+<!-- ===== 特色亮点 ===== -->
+<section class="section" id="features">
+  <div class="container">
+    <div class="section-header">
+      <div class="section-label">为什么选择我们</div>
+      <h2>阳光训练，快乐成长</h2>
+      <p>不只是学搏击，更是收获自信、健康与友谊</p>
+    </div>
+    <div class="features-grid">
+      <div class="feature-card">
+        <span class="feature-icon">🥇</span>
+        <h3>专业教练指导</h3>
+        <p>多年散打教学经验，因材施教，关注每个学员的成长进步</p>
+      </div>
+      <div class="feature-card">
+        <span class="feature-icon">📐</span>
+        <h3>科学训练体系</h3>
+        <p>循序渐进的教学计划，从基本功到实战技巧，系统提升搏击能力</p>
+      </div>
+      <div class="feature-card">
+        <span class="feature-icon">💪</span>
+        <h3>强身健体自信</h3>
+        <p>增强体魄、磨练意志，让孩子在汗水中找到自信与力量</p>
+      </div>
+      <div class="feature-card">
+        <span class="feature-icon">👥</span>
+        <h3>小班精品教学</h3>
+        <p>每班限额招生，确保每位学员都能得到充分的关注与指导</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== 视频展示 ===== -->
+<section class="section video-section" id="videos">
+  <div class="container">
+    <div class="section-header">
+      <div class="section-label">训练视频</div>
+      <h2>感受搏击的魅力</h2>
+      <p>每一拳、每一腿，都是成长的印记</p>
+    </div>
+    <div class="video-grid">
+      <div class="video-card">
+        <div class="video-wrapper">
+          <video src="media/videos/video1.mp4" poster="" controls preload="metadata">
+            您的浏览器不支持视频播放，请升级浏览器。
+          </video>
+        </div>
+        <div class="video-card-body">
+          <h4>🥊 训练集锦一</h4>
+          <p>挥洒汗水，拼搏进取</p>
+        </div>
+      </div>
+      <div class="video-card">
+        <div class="video-wrapper">
+          <video src="media/videos/video2.mp4" poster="" controls preload="metadata">
+            您的浏览器不支持视频播放，请升级浏览器。
+          </video>
+        </div>
+        <div class="video-card-body">
+          <h4>⚡ 训练集锦二</h4>
+          <p>拳法扎实，步步为营</p>
+        </div>
+      </div>
+      <div class="video-card">
+        <div class="video-wrapper">
+          <video src="media/videos/video3.mp4" poster="" controls preload="metadata">
+            您的浏览器不支持视频播放，请升级浏览器。
+          </video>
+        </div>
+        <div class="video-card-body">
+          <h4>💪 训练集锦三</h4>
+          <p>腿法凌厉，气势如虹</p>
+        </div>
+      </div>
+      <div class="video-card">
+        <div class="video-wrapper">
+          <video src="media/videos/video4.mp4" poster="" controls preload="metadata">
+            您的浏览器不支持视频播放，请升级浏览器。
+          </video>
+        </div>
+        <div class="video-card-body">
+          <h4>🔥 训练集锦四</h4>
+          <p>实战对练，技术精进</p>
+        </div>
+      </div>
+      <div class="video-card">
+        <div class="video-wrapper">
+          <video src="media/videos/video5.mp4" poster="" controls preload="metadata">
+            您的浏览器不支持视频播放，请升级浏览器。
+          </video>
+        </div>
+        <div class="video-card-body">
+          <h4>🎯 训练集锦五</h4>
+          <p>坚持不懈，突破自我</p>
+        </div>
+      </div>
+      <div class="video-card">
+        <div class="video-wrapper">
+          <video src="media/videos/video6.mp4" poster="" controls preload="metadata">
+            您的浏览器不支持视频播放，请升级浏览器。
+          </video>
+        </div>
+        <div class="video-card-body">
+          <h4>🏆 训练集锦六</h4>
+          <p>阳光训练，快乐成长</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== 照片墙 ===== -->
+<section class="section gallery" id="gallery">
+  <div class="container">
+    <div class="section-header">
+      <div class="section-label">精彩瞬间</div>
+      <h2>训练风采墙</h2>
+      <p>每一张照片都记录着拼搏与欢笑</p>
+    </div>
+    <div class="gallery-grid" id="galleryGrid" style="grid-template-columns: repeat(2, 1fr);">
+      <!-- 你的训练照片 -->
+      <div class="gallery-item tall" data-src="media/photos/photo1.jpg" data-caption="挥洒汗水的训练时光">
+        <img src="media/photos/photo1.jpg" alt="训练时光" loading="lazy" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
+        <div class="gallery-placeholder" style="display:none">📸<br>训练照</div>
+        <div class="gallery-overlay"><span>挥洒汗水的训练时光</span></div>
+      </div>
+      <div class="gallery-item tall" data-src="media/photos/photo2.jpg" data-caption="阳光自信的学员们">
+        <img src="media/photos/photo2.jpg" alt="学员风采" loading="lazy" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
+        <div class="gallery-placeholder" style="display:none">📸<br>学员照</div>
+        <div class="gallery-overlay"><span>阳光自信的学员们</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Lightbox -->
+<dialog class="lightbox" id="lightbox">
+  <div class="lightbox-content">
+    <button class="lightbox-close" id="lightboxClose">&times;</button>
+    <button class="lightbox-nav lightbox-prev" id="lightboxPrev">◀</button>
+    <button class="lightbox-nav lightbox-next" id="lightboxNext">▶</button>
+    <img src="" alt="" id="lightboxImg">
+  </div>
+</dialog>
+
+<!-- ===== 教练简介 ===== -->
+<section class="section coach" id="coach">
+  <div class="container">
+    <div class="coach-grid">
+      <div class="coach-photo">
+        <!-- 把你的教练照片放到 media/photos/coach.jpg -->
+        <img src="media/photos/coach.jpg" alt="吴教练" style="width:100%;height:100%;object-fit:cover;border-radius:var(--radius)" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
+        <div class="coach-photo-placeholder" style="display:none">
+          📷<br>教练照片<br><small>（放入 media/photos/coach.jpg）</small>
+        </div>
+      </div>
+      <div class="coach-info">
+        <h2>吴教练</h2>
+        <p class="coach-title">🏆 资深散打教练 · 国家一级运动员</p>
+        <p class="bio">
+          从事散打教学多年，积累了丰富的实战与教学经验。我始终相信，武术不仅是技术，更是一种生活态度——它教会我们坚持、勇敢和尊重。我的课堂充满阳光和正能量，因为每个学员都值得被看见、被鼓励。
+        </p>
+        <div class="coach-tags">
+          <span class="coach-tag">🏅 国家一级运动员</span>
+          <span class="coach-tag">📜 散打高级教练证</span>
+          <span class="coach-tag">👶 青少年体能训练认证</span>
+          <span class="coach-tag">❤️ 急救员认证</span>
+        </div>
+        <p class="coach-motto">
+          "不苛求每个孩子成为冠军，<br>但希望每个孩子都能成为更好的自己。"
+        </p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== 联系报名 ===== -->
+<section class="section contact" id="contact">
+  <div class="container">
+    <div class="section-header">
+      <div class="section-label">加入我们</div>
+      <h2>快来免费体验一节课吧！</h2>
+      <p>填写表单或直接联系我们，我们会在24小时内回复</p>
+    </div>
+    <div class="contact-grid">
+      <div class="contact-info">
+        <div class="contact-item">
+          <div class="contact-icon">📍</div>
+          <div>
+            <h4>训练地址</h4>
+            <p>龙虎山文武学校</p>
+          </div>
+        </div>
+        <div class="contact-item">
+          <div class="contact-icon">📞</div>
+          <div>
+            <h4>联系电话</h4>
+            <p>138-xxxx-xxxx（吴教练）</p>
+          </div>
+        </div>
+        <div class="contact-item">
+          <div class="contact-icon">🕐</div>
+          <div>
+            <h4>训练时间</h4>
+            <p>周二至周五 16:00-20:00<br>周六日 9:00-18:00</p>
+          </div>
+        </div>
+        <div class="contact-item">
+          <div class="contact-icon">💬</div>
+          <div>
+            <h4>微信咨询</h4>
+            <div class="qr-box">
+              <!-- 把你的微信二维码图片放到 media/photos/qrcode.jpg -->
+              <img src="media/photos/qrcode.jpg" alt="微信二维码" style="width:150px;height:150px;object-fit:contain" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
+              <div class="qr-placeholder" style="display:none">微信<br>二维码<br>（放入 media/photos/qrcode.jpg）</div>
+              <p>扫一扫加我微信</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 报名表单 -->
+      <form class="contact-form" action="https://formsubmit.co/your-email@example.com" method="POST">
+        <!-- 隐藏 formsubmit 设置 -->
+        <input type="hidden" name="_subject" value="阳光散打训练营 — 新报名咨询">
+        <input type="hidden" name="_captcha" value="false">
+        <input type="hidden" name="_template" value="table">
+
+        <div class="form-group">
+          <label for="name">学员姓名 *</label>
+          <input type="text" id="name" name="name" placeholder="请输入学员姓名" required>
+        </div>
+        <div class="form-group">
+          <label for="age">学员年龄</label>
+          <select id="age" name="age">
+            <option value="">请选择年龄段</option>
+            <option value="4-6">4-6岁（幼儿启蒙）</option>
+            <option value="7-12">7-12岁（少儿基础）</option>
+            <option value="13-17">13-17岁（青少年进阶）</option>
+            <option value="18+">18岁以上（成人训练）</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label for="phone">联系电话 *</label>
+          <input type="tel" id="phone" name="phone" placeholder="请输入您的手机号" required>
+        </div>
+        <div class="form-group">
+          <label for="message">留言（可选）</label>
+          <textarea id="message" name="message" placeholder="有什么想了解的吗？比如：零基础可以学吗？"></textarea>
+        </div>
+        <button type="submit" class="form-submit">🥊 提交报名</button>
+        <p class="form-note">提交后我们会在24小时内电话联系您，请保持手机畅通</p>
+      </form>
+    </div>
+  </div>
+</section>
+
+<!-- ===== 页脚 ===== -->
+<footer class="footer">
+  <p>&copy; 2026 <strong>阳光散打搏击训练营</strong> · 用汗水浇灌自信，用坚持成就强者</p>
+</footer>
+
+<!-- 回到顶部 -->
+<button class="back-to-top" id="backToTop" aria-label="回到顶部">⬆</button>
+
+<!-- ===== JS ===== -->
+<script>
+(function() {
+  // ===== 导航栏滚动效果 =====
+  const nav = document.getElementById('navbar');
+  const backToTop = document.getElementById('backToTop');
+  const navToggle = document.getElementById('navToggle');
+  const navLinks = document.getElementById('navLinks');
+
+  function onScroll() {
+    const scrolled = window.scrollY > 60;
+    nav.classList.toggle('scrolled', scrolled);
+    backToTop.classList.toggle('visible', window.scrollY > 500);
+
+    // 高亮当前导航
+    const sections = document.querySelectorAll('section[id]');
+    let current = '';
+    sections.forEach(s => {
+      if (window.scrollY >= s.offsetTop - 150) current = s.id;
+    });
+    document.querySelectorAll('.nav-links a').forEach(a => {
+      a.classList.toggle('active', a.getAttribute('href') === '#' + current);
+    });
+  }
+  window.addEventListener('scroll', onScroll, { passive: true });
+
+  // ===== 移动端菜单 =====
+  navToggle.addEventListener('click', () => {
+    navToggle.classList.toggle('open');
+    navLinks.classList.toggle('open');
+  });
+  // 点击菜单项后关闭
+  navLinks.querySelectorAll('a').forEach(a => {
+    a.addEventListener('click', () => {
+      navToggle.classList.remove('open');
+      navLinks.classList.remove('open');
+    });
+  });
+
+  // ===== 回到顶部 =====
+  backToTop.addEventListener('click', () => {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  });
+
+  // ===== 照片墙 Lightbox =====
+  const lightbox = document.getElementById('lightbox');
+  const lightboxImg = document.getElementById('lightboxImg');
+  const lightboxClose = document.getElementById('lightboxClose');
+  const lightboxPrev = document.getElementById('lightboxPrev');
+  const lightboxNext = document.getElementById('lightboxNext');
+  let currentItems = [];
+  let currentIndex = 0;
+
+  // 收集所有有 src 的 gallery item
+  function getGalleryItems() {
+    return Array.from(document.querySelectorAll('.gallery-item[data-src]'));
+  }
+
+  function openLightbox(index) {
+    currentItems = getGalleryItems();
+    currentIndex = index;
+    const item = currentItems[currentIndex];
+    const src = item.dataset.src;
+    if (src) {
+      lightboxImg.src = src;
+    } else {
+      // 如果是占位状态，不做任何事
+      return;
+    }
+    lightboxImg.alt = item.dataset.caption || '';
+    updateNavButtons();
+    lightbox.showModal();
+    document.body.style.overflow = 'hidden';
+  }
+
+  function closeLightbox() {
+    lightbox.close();
+    document.body.style.overflow = '';
+  }
+
+  function updateNavButtons() {
+    lightboxPrev.style.display = currentIndex > 0 ? 'flex' : 'none';
+    lightboxNext.style.display = currentIndex < currentItems.length - 1 ? 'flex' : 'none';
+  }
+
+  lightboxClose.addEventListener('click', closeLightbox);
+  lightbox.addEventListener('click', (e) => {
+    if (e.target === lightbox) closeLightbox();
+  });
+
+  lightboxPrev.addEventListener('click', (e) => {
+    e.stopPropagation();
+    if (currentIndex > 0) {
+      currentIndex--;
+      const item = currentItems[currentIndex];
+      lightboxImg.src = item.dataset.src || '';
+      lightboxImg.alt = item.dataset.caption || '';
+      updateNavButtons();
+    }
+  });
+
+  lightboxNext.addEventListener('click', (e) => {
+    e.stopPropagation();
+    if (currentIndex < currentItems.length - 1) {
+      currentIndex++;
+      const item = currentItems[currentIndex];
+      lightboxImg.src = item.dataset.src || '';
+      lightboxImg.alt = item.dataset.caption || '';
+      updateNavButtons();
+    }
+  });
+
+  // 键盘导航
+  document.addEventListener('keydown', (e) => {
+    if (!lightbox.open) return;
+    if (e.key === 'Escape') closeLightbox();
+    if (e.key === 'ArrowLeft' && currentIndex > 0) {
+      currentIndex--;
+      const item = currentItems[currentIndex];
+      lightboxImg.src = item.dataset.src || '';
+      lightboxImg.alt = item.dataset.caption || '';
+      updateNavButtons();
+    }
+    if (e.key === 'ArrowRight' && currentIndex < currentItems.length - 1) {
+      currentIndex++;
+      const item = currentItems[currentIndex];
+      lightboxImg.src = item.dataset.src || '';
+      lightboxImg.alt = item.dataset.caption || '';
+      updateNavButtons();
+    }
+  });
+
+  // 绑定点击事件到每个 gallery item
+  document.getElementById('galleryGrid').addEventListener('click', (e) => {
+    const item = e.target.closest('.gallery-item[data-src]');
+    if (!item) return;
+    const items = getGalleryItems();
+    const idx = items.indexOf(item);
+    if (idx >= 0) openLightbox(idx);
+  });
+
+  // ===== 表单提交提示 =====
+  const form = document.querySelector('.contact-form');
+  form.addEventListener('submit', (e) => {
+    const action = form.getAttribute('action');
+    // 如果还没配置 formsubmit 邮箱，拦截并提示
+    if (action.includes('your-email@example.com')) {
+      e.preventDefault();
+      alert('📝 提示：请先配置表单接收邮箱！\n\n将表单 action 中的 your-email@example.com\n替换为你的真实邮箱即可使用。\n\n免费表单服务由 formsubmit.co 提供。');
+    }
+  });
+
+})();
+</script>
+
+</body>
+</html>
